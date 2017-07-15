@@ -1,0 +1,23 @@
+{
+  "name": "google_geocoding-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reyespaolo/google_geocoding-service.git"
+  },
+  "keywords": [
+    "Google",
+    "Geocode"
+  ],
+  "author": "Paolo Brainard M. Reyes <xreyes.paolox@gmail.com> (http://360logix.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reyespaolo/google_geocoding-service/issues"
+  },
+  "homepage": "https://github.com/reyespaolo/google_geocoding-service#readme"
+}

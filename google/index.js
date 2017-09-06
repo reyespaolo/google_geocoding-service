@@ -8,6 +8,7 @@ const parseReverseGeoAddressGoogle = data => {
 			full_address : data.results[0].formatted_address
 		},
 		addressJSON = data.results[0].address_components;
+    console.log(addressJSON)
 		for (var i = 0; i < addressJSON.length; i++) {
 			switch (addressJSON[i].types[0]) {
 				case 'street_number':
@@ -30,6 +31,8 @@ const parseReverseGeoAddressGoogle = data => {
 					break;
 				case 'country':
 					address.country = addressJSON[i].long_name;
+          address.countryCode = addressJSON[i].short_name;
+
 					break;
 				case 'postal_code':
 					address.postal_code = addressJSON[i].long_name;
@@ -67,6 +70,10 @@ const RequestReverseGeocode = (apiKey,lat,lng,callback) => {
 					return;
 				}
 				var address = parseReverseGeoAddressGoogle(body)
+        address.points = {
+          'latitude' : lat,
+          'longitude' : lng
+        }
 				if (callback) {
 					callback(address);
 				} else {

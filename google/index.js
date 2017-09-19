@@ -1,3 +1,4 @@
+`use strict`
 const https = require('https');
 const http = require('http');
 const url = require('url');
@@ -53,10 +54,10 @@ const RequestReverseGeocode = (apiKey,lat,lng,callback) => {
 					path: '/maps/api/geocode/json?latlng=' + query + '&key=' + apiKey
 				};
 		var req = https.get(options, function(res) {
-			console.log('Response: ' + res.statusCode);
+			// console.log('Response: ' + res.statusCode);
 			var results = '';
 			res.on('error', function(e) {
-				console.log('Got error: ' + e.message);
+				// console.log('Got error: ' + e.message);
 			});
 			res.on('data', function(data) {
 
@@ -65,8 +66,9 @@ const RequestReverseGeocode = (apiKey,lat,lng,callback) => {
 			res.on('end', function() {
 				var body = JSON.parse(results);
 				if (body.error_message) {
-					console.log(body.error_message);
-					return;
+					// console.log(body.error_message);
+          address = "No Result"
+					return address;
 				}
 				var address = parseReverseGeoAddressGoogle(body)
         address.coords = [lng,lat];

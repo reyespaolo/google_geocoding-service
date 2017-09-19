@@ -68,7 +68,7 @@ const RequestReverseGeocode = (apiKey,lat,lng,callback) => {
 				if (body.error_message) {
 					// console.log(body.error_message);
           // address = "No Result"
-					return;
+					callback(No Result);
 				}
 
 				var address = parseReverseGeoAddressGoogle(body)
@@ -76,9 +76,9 @@ const RequestReverseGeocode = (apiKey,lat,lng,callback) => {
 
         // address.coords.push(lng);
         // address.coords.push(lat);
-        if(body.error_message){
-          address = "No Result"
-        }
+        // if(body.error_message){
+        //   address = "No Result"
+        // }
 
 				if (callback) {
 					callback(address);

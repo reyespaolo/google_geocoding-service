@@ -68,23 +68,30 @@ const RequestReverseGeocode = (apiKey,lat,lng,callback) => {
 				if (body.error_message) {
 					// console.log(body.error_message);
           // address = "No Result"
-					callback("No Result");
-				}
+					// callback("No Result");
+          if (callback) {
+  					callback("No Result");
+  				} else {
+  					return "No Result";
+  				}
+				}else{
+          var address = parseReverseGeoAddressGoogle(body)
+          address.coords = [lng,lat];
 
-				var address = parseReverseGeoAddressGoogle(body)
-        address.coords = [lng,lat];
+          // address.coords.push(lng);
+          // address.coords.push(lat);
+          // if(body.error_message){
+          //   address = "No Result"
+          // }
 
-        // address.coords.push(lng);
-        // address.coords.push(lat);
-        // if(body.error_message){
-        //   address = "No Result"
-        // }
+  				if (callback) {
+  					callback(address);
+  				} else {
+  					return address;
+  				};
+        }
 
-				if (callback) {
-					callback(address);
-				} else {
-					return address;
-				};
+
 			});
 		});
 }

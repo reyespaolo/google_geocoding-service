@@ -1,6 +1,6 @@
 {
   "name": "google_geocoding-service",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "google/index.js",
   "scripts": {

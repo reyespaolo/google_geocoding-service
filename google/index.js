@@ -67,14 +67,18 @@ const RequestReverseGeocode = (apiKey,lat,lng,callback) => {
 				var body = JSON.parse(results);
 				if (body.error_message) {
 					// console.log(body.error_message);
-          address = "No Result"
-					return address;
+          // address = "No Result"
+					return;
 				}
+
 				var address = parseReverseGeoAddressGoogle(body)
         address.coords = [lng,lat];
 
         // address.coords.push(lng);
         // address.coords.push(lat);
+        if(body.error_message){
+          address = "No Result"
+        }
 
 				if (callback) {
 					callback(address);

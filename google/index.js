@@ -1,101 +1,99 @@
-`use strict`
-const https = require('https');
-const http = require('http');
-const url = require('url');
+'use strict'
+
+const httpreq = require('httpreq')
 
 const parseReverseGeoAddressGoogle = data => {
-  var address = {
-			provider: "Google",
-			full_address : data.results[0].formatted_address
-		},
-		addressJSON = data.results[0].address_components;
-		for (var i = 0; i < addressJSON.length; i++) {
-			switch (addressJSON[i].types[0]) {
-				case 'street_number':
-					address.street_number = addressJSON[i].long_name;
-					break;
-				case 'route':
-					address.street = addressJSON[i].long_name;
-					break;
-				case 'neighborhood':
-					address.neighborhood = addressJSON[i].long_name;
-					break;
-				case 'locality' || 'sublocality':
-					address.city = addressJSON[i].long_name;
-					break;
-				case 'administrative_area_level_2':
-					address.municipality2 = addressJSON[i].long_name;
-					break;
-				case 'administrative_area_level_1':
-					address.municipality = addressJSON[i].long_name;
-					break;
-				case 'country':
-					address.country = addressJSON[i].long_name;
-          address.countryCode = addressJSON[i].short_name;
-
-					break;
-				case 'postal_code':
-					address.postal_code = addressJSON[i].long_name;
-					break;
-			};
-		};
-		return address;
+  let address = {
+    provider: 'Google',
+    full_address: data.results[0].formatted_address
+  }
+  let addressJSON = data.results[0].address_components
+  for (var i = 0; i < addressJSON.length; i++) {
+    switch (addressJSON[i].types[0]) {
+      case 'street_number':
+        address.street_number = addressJSON[i].long_name
+        break
+      case 'route':
+        address.street = addressJSON[i].long_name
+        break
+      case 'neighborhood':
+        address.neighborhood = addressJSON[i].long_name
+        break
+      case 'locality' || 'sublocality':
+        address.city = addressJSON[i].long_name
+        break
+      case 'administrative_area_level_2':
+        address.municipality2 = addressJSON[i].long_name
+        break
+      case 'administrative_area_level_1':
+        address.municipality = addressJSON[i].long_name
+        break
+      case 'country':
+        address.country = addressJSON[i].long_name
+        address.countryCode = addressJSON[i].short_name
+        break
+      case 'postal_code':
+        address.postal_code = addressJSON[i].long_name
+        break
+    }
+  }
+  return address
 }
 
-const RequestReverseGeocode = (apiKey,lat,lng,callback) => {
+const RequestReverseGeocode = (apiKey, lat, lng, callback) => {
   if (lat.lat && lat.lng) {
-  			callback = lng
-  			lng = lat.lng
-  			lat = lat.lat
+    callback = lng
+    lng = lat.lng
+    lat = lat.lat
   }
-  var query = lat.toString() + ',' + lng.toString() + '&sensor=false',
-				options = {
-					host : 'maps.googleapis.com',
-					path: '/maps/api/geocode/json?latlng=' + query + '&key=' + apiKey
-				};
-		var req = https.get(options, function(res) {
-			// console.log('Response: ' + res.statusCode);
-			var results = '';
-			res.on('error', function(e) {
-				// console.log('Got error: ' + e.message);
-			});
-			res.on('data', function(data) {
+  let options = {
+  	timeout: 3000,
+  	method: 'GET',
+    url: 'https://maps.googleapis.com/maps/api/geocode/json',
+    parameters: {
+    	latlng: lat.toString() + ',' + lng.toString(),
+    	sensor: false,
+    	key: apiKey
+    }
+  }
 
-				results += data;
-			});
-			res.on('end', function() {
-				var body = JSON.parse(results);
-				if (body.error_message) {
-					// console.log(body.error_message);
-          // address = "No Result"
-					// callback("No Result");
-          if (callback) {
-  					callback("No Result");
-  				} else {
-  					return "No Result";
-  				}
-				}else{
-          var address = parseReverseGeoAddressGoogle(body)
-          address.coords = [lng,lat];
+  httpreq.doRequest(options, (err, res) => {
+  	let data = res && res.body || ''
+    let error = null
+    let parsedData = null
 
-          // address.coords.push(lng);
-          // address.coords.push(lat);
-          // if(body.error_message){
-          //   address = "No Result"
-          // }
+    try {
+      parsedData = JSON.parse(data)
+    } catch (e) {
+      error = new Error('Invalid response')
+      error.error = e
+    }
 
-  				if (callback) {
-  					callback(address);
-  				} else {
-  					return address;
-  				};
-        }
+    if (err) {
+      error = new Error('Request failed')
+      error.error = err
+    }
 
+    if (parsedData && parsedData.error_message) {
+      error = new Error(parsedData.status)
+      error.error =  parsedData.error_message
+    }
 
-			});
-		});
+    if (error) {
+      callback(error)
+    } else {
+    	if (!parsedData.results) {
+    		error = new Error('No Results')
+      	callback(error)
+    	} else {
+    		let address = parseReverseGeoAddressGoogle(parsedData)
+	      address.coords = [lng, lat]
+	      callback(null, address)
+    	}
+    }
+  })
 }
 
 module.exports = {
   RequestReverseGeocode: RequestReverseGeocode,
-};
+}

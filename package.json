@@ -15,9 +15,15 @@
     "Geocode"
   ],
   "author": "Paolo Brainard M. Reyes <xreyes.paolox@gmail.com> (http://360logix.com)",
+  "contributor": [
+    "Zabdiel G. Salahid <zabsalahid@gmail.com> (http://360logix.com)"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/reyespaolo/google_geocoding-service/issues"
   },
-  "homepage": "https://github.com/reyespaolo/google_geocoding-service#readme"
+  "homepage": "https://github.com/reyespaolo/google_geocoding-service#readme",
+  "dependencies": {
+    "httpreq": "^0.4.24"
+  }
 }

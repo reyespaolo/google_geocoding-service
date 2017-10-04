@@ -1,8 +1,5 @@
-const reverseGeocode = require('./google');
+const reverseGeocode = require('./google')
 
-const config = require('./config');
-
-
-reverseGeocode.RequestReverseGeocode(config.apiKey, 14.632906,121.001651, data => {
-  console.log(data)
+reverseGeocode.RequestReverseGeocode('apiKey', 14.632906, 121.001651, (err, result) => {
+  console.log(err && err.message, result)
 })

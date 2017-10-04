@@ -82,13 +82,13 @@ const RequestReverseGeocode = (apiKey, lat, lng, callback) => {
     if (error) {
       callback(error)
     } else {
-    	if (!parsedData.results) {
-    		error = new Error('No Results')
-      	callback(error)
-    	} else {
-    		let address = parseReverseGeoAddressGoogle(parsedData)
+    	if (parsedData.results && parsedData.results.length) {
+      	let address = parseReverseGeoAddressGoogle(parsedData)
 	      address.coords = [lng, lat]
 	      callback(null, address)
+    	} else {
+    		error = new Error('No Results')
+      	callback(error)
     	}
     }
   })

@@ -15,8 +15,12 @@
     "Geocode"
   ],
   "author": "Paolo Brainard M. Reyes <xreyes.paolox@gmail.com> (http://360logix.com)",
-  "contributor": [
-    "Zabdiel G. Salahid <zabsalahid@gmail.com> (http://360logix.com)"
+  "contributors": [
+    {
+      "name": "Zabdiel G. Salahid",
+      "email": "zabsalahid@gmail.com",
+      "url": "https://github.com/zabsalahid"
+    }
   ],
   "license": "ISC",
   "bugs": {
